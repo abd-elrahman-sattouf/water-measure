@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akıllı Sayaç Platformu</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="./styles/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <ol id="navigation">
+        <img src="./assets/pic.jpg" alt="logo" id="nav-logo" />
+        <li><a href="#home">home |</a></li>
+        <li><a href="">mission |</a></li>
+        <li><a href="">about us |</a></li>
+        <li><a href="">contact us |</a></li>
+      </ol>
+    </nav>
+    <h1>Akıllı Sayaç Platformu</h1>
+    <p>
+      Conserving water is crucial for a sustainable future. By reducing our
+      water consumption, we can protect this precious resource for generations
+      to come. This smart web page can be a valuable tool in your water-saving
+      journey. By tracking your water usage and providing real-time insights,
+      you can become more aware of your consumption patterns and identify areas
+      for improvement. This may include taking shorter showers, fixing leaks
+      promptly, and optimizing your watering habits for your garden. By making
+      conscious choices and utilizing this helpful tool, you can play a
+      significant role in conserving water and ensuring a sustainable future for
+      all.
+    </p>
+    <h2>the following simulatore shows your water level in the tank at the real time</h2>
+    <div class="container">
+      <div class="tank">
+        <div class="water"></div>
+      </div>
+      <div id="level"></div>
+    </div>
+
+    <button onclick="fetchConsumption()">Get Consumption Data</button>
+    <button onclick="clearConsumption()">clear Consumption Data</button>
+
+    <button onclick="fetchAlerts()">Check Alerts</button>
+    <button onclick="clearAlerts()">Clear Alerts</button>
+    <div id="consumption"></div>
+    <div id="alerts"></div>
+    <footer id="footer"></footer>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
