@@ -1,10 +1,5 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const http = require('http');
+const url = require('url');
 
 // Fake data generation: Consumption data (as an example)
 let consumptionData = [
@@ -24,35 +19,46 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-app.get("/api", (req, res) => {
-  res.send("Akıllı Sayaç Platformu Backend Çalışıyor!");
-});
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  const method = req.method;
+  const pathname = parsedUrl.pathname;
 
-app.get("/api/consumption", (req, res) => {
-  // Returns the user's water consumption data
-  res.json({ status: "success", data: consumptionData });
-});
-
-app.get("/api/alert", (req, res) => {
-  // Simple check for abnormal consumption analysis
-  const alerts = consumptionData
-    .filter((data) => data.consumption_liters > 400)
-    .map((data) => ({ date: data.date, message: "Anormal yüksek tüketim!" }));
-  res.json({ status: "success", alerts: alerts });
-});
-
-app.post("/api/add", (req, res) => {
-  // Adds new consumption data
-  const newData = req.body;
-  if (newData.date && newData.consumption_liters) {
-    consumptionData.push(newData);
-    res.json({ status: "success", message: "Veri eklendi!" });
+  if (method === 'GET' && pathname === '/api') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Akıllı Sayaç Platformu Backend Çalışıyor!');
+  } else if (method === 'GET' && pathname === '/api/consumption') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: "success", data: consumptionData }));
+  } else if (method === 'GET' && pathname === '/api/alert') {
+    const alerts = consumptionData
+      .filter((data) => data.consumption_liters > 400)
+      .map((data) => ({ date: data.date, message: "Anormal yüksek tüketim!" }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: "success", alerts: alerts }));
+  } else if (method === 'POST' && pathname === '/api/add') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+    req.on('end', () => {
+      const newData = JSON.parse(body);
+      if (newData.date && newData.consumption_liters) {
+        consumptionData.push(newData);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: "success", message: "Veri eklendi!" }));
+      } else {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: "error", message: "Eksik veri!" }));
+      }
+    });
   } else {
-    res.status(400).json({ status: "error", message: "Eksik veri!" });
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
