@@ -1,0 +1,17 @@
+{
+  "name": "test2",
+  "version": "1.0.0",
+  "main": "waterleve.js",
+  "scripts": {
+    "start": "nodemon ./js/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  }
+}
